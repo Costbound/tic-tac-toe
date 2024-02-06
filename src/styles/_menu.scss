@@ -10,10 +10,90 @@
     padding: 24px 24px 30px 24px;
     border-radius: 15px;
     box-shadow: inset 0 -8px 0 0 #10212a;
-    background: #1F3641;
+    background: $semi-dark-navy;
+    margin-bottom: 40px;
     .mark-selector__title {
-        text-align: center;
         font-size: 16px;
-        color: #A8BFC9;
+        color: $silver;
+        margin-bottom: 24px;
     }
+    .mark-selector__checkbox:checked + .mark-selector__label {
+        .mark-selector__selected-div {
+            transform: translateX(100%)
+        }
+        .mark-selector__x-icon {
+            fill: #979797;
+        }
+        .mark-selector__o-icon {
+            fill: #1A2A33;
+        }
+    }
+    .mark-selector__label {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: relative;
+        padding: 9px;
+        background-color: #1A2A33;
+        border-radius: 10px;
+        height: 72px;
+        margin-bottom: 18px;
+        .mark-selector__x-icon,
+        .mark-selector__o-icon {
+            z-index: 2;
+            transition: fill 250ms;
+        }
+        .mark-selector__x-icon {
+            fill: #1A2A33;
+        }
+        .mark-selector__o-icon {
+            fill: #979797;
+        }
+    }
+    .mark-selector__selected-div {
+        position: absolute;
+        left: 9px;
+        background-color: #979797;
+        border-radius: 10px;
+        width: 198px;
+        height: 54px;
+        transition: transform 250ms;
+    }
+    .mark-selector__notice {
+        color: $silver;
+        opacity: 0.5;
+    }
+}
+
+.enemy-selector__cpu-btn,
+.enemy-selector__multiplayer-btn {
+    width: 100%;
+    height: 59px;
+    border-radius: 15px;
+    color: #1A2A33;
+    transition: 
+        background-color 250ms,
+        transform 50ms,
+        box-shadow 50ms;
+}
+.enemy-selector__cpu-btn {
+    background-color: $light-yellow;
+    box-shadow: 0 8px 0 0 #cc8b13;
+    margin-bottom: 27px;
+}
+.enemy-selector__multiplayer-btn {
+    background-color: $light-blue;
+    box-shadow: 0 8px 0 0 #118c87;
+}
+.enemy-selector__cpu-btn:hover {
+    background-color: $light-yellow-hover;
+}
+.enemy-selector__multiplayer-btn:hover { 
+    background-color: $light-blue-hover;
+}
+.enemy-selector__cpu-btn:active,
+.enemy-selector__multiplayer-btn:active {
+    box-shadow: none;
+    transform: translateY(8px);
 }

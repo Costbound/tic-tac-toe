@@ -12,6 +12,9 @@ type State = {
     isStarted: boolean
     isMultiplayer: boolean
 }
+export type HandleClick = {
+    selectedMark?: string
+}
 
 export class Game extends React.Component<GameProps, State> {
     state: State
@@ -24,14 +27,33 @@ export class Game extends React.Component<GameProps, State> {
         }
     }
 
-    render(): React.ReactNode {
+    handleClick(i:HandleClick): void {
+        console.log(i)
+        if (i.selectedMark === "x") {
+            this.setState({
+                isXSelected: true
+            }) 
+        } else if (i.selectedMark === "o") {
+            this.setState({
+                isXSelected: false
+            })
+        }
+        console.log(this.state)
+    }
+
+    render(): React.ReactNode | null {
         if (!this.state.isStarted) {
             return (
-                <Menu />
+                <Menu
+                    isXSelected={this.state.isXSelected}
+                    onClick={(i) => { this.handleClick(i) }}
+                />
             )
         }
+        return null
     }
 }
+
 
 const root = ReactDOM.createRoot(document.querySelector('.game')!)
 root.render(<Game />)
