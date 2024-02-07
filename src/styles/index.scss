@@ -54,5 +54,11 @@ button {
     clip: rect(0 0 0 0);
     overflow: hidden;
 }
+.board-container {
+    width: 460px;
+}
 
-@import 'menu'
+@import 'menu';
+@import 'board-header';
+@import 'game-field';
+@import 'score-board'

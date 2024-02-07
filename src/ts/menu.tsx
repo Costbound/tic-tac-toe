@@ -1,22 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import sprite from '../assets/img/sprite.svg'
-import { HandleClick } from './main'
 
 
-type MenuProps = {
-    isXSelected: boolean
-    onClick: (param: HandleClick) => void
+interface MenuProps  {
+    onChange: (param: boolean) => void
+    onClick: (param: boolean) => void
+}
+interface MarkSelectorProps {
+    onChange: (param: boolean) => void
+}
+interface EnemySelectorProps {
+    onClick: (param: boolean) => void
 }
 
-export function Menu(props: MenuProps): React.ReactNode {
+    
+export default function Menu(props: MenuProps): React.ReactNode {
         return (
             <div className='menu-container'>
                 <Logo />
                 <MarkSelector
-                    isXSelected={props.isXSelected}
+                    onChange = {(i) => {props.onChange(i)}}
+                />
+                <EnemySelector
                     onClick = {(i) => {props.onClick(i)}}
                 />
-                <EnemySelector />
             </div>
         )
 }
@@ -31,15 +38,19 @@ function Logo() {
     )
 }
 
-function MarkSelector(props: MenuProps) {
-    const xSelected = props.isXSelected ? ' mark-selector__btn_selected' : ''
-    const oSelected = props.isXSelected ? '' : ' mark-selector__btn_selected'
-    console.log(xSelected, oSelected)
+function MarkSelector(props: MarkSelectorProps) {
+const [checked, setChecked] = useState(true)
 
     return (
         <div className="mark-selector__container">
             <h2 className="mark-selector__title">pick players 1's mark</h2>
-            <input type="checkbox" className="mark-selector__checkbox visually-hidden" id='mark-selector'/>
+            <input
+                type="checkbox"
+                className="mark-selector__checkbox visually-hidden"
+                id='mark-selector'
+                checked={!checked}
+                onChange={() => { props.onChange(!checked);  setChecked(!checked) }}
+            />
             <label className="mark-selector__label" htmlFor='mark-selector'>
                 <div className="mark-selector__selected-div"></div>
                 <svg className='mark-selector__x-icon' width='32' height='32'>
@@ -54,11 +65,23 @@ function MarkSelector(props: MenuProps) {
     )
 }
 
-function EnemySelector() {
+function EnemySelector(props: EnemySelectorProps) {
     return (
         <div className="enemy-selector__container">
-            <button className="enemy-selector__cpu-btn" type='button'>new game (vs cpu)</button>
-            <button className="enemy-selector__multiplayer-btn" type='button'>new game (vs player)</button>
+            <button
+                className="enemy-selector__cpu-btn"
+                type='button'
+                onClick={() => props.onClick(false)}
+            >
+                new game (vs cpu)
+            </button>
+            <button
+                className="enemy-selector__multiplayer-btn"
+                type='button'
+                onClick={() => props.onClick(true)}
+            >
+                new game (vs player)
+            </button>
         </div>
     )
 }

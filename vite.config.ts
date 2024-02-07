@@ -27,6 +27,6 @@ export default defineConfig(({ command }) => {
       outDir: '../dist',
     },
     plugins: [injectHTML(), FullReload(['./src/**/**.html']), react()],
-    base: '/dictionary-web-app/'
+    base: '/tic-tac-toe/'
   };
 });

@@ -1,56 +1,51 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import '../styles/index.scss'
-import { Menu } from './menu'
+import Menu from './menu'
+import Board from './board'
 
 
-type GameProps = {
-
-}
-type State = {
+type GameState = {
     isXSelected: boolean
-    isStarted: boolean
-    isMultiplayer: boolean
-}
-export type HandleClick = {
-    selectedMark?: string
+    isMultiplayer: boolean | null
 }
 
-export class Game extends React.Component<GameProps, State> {
-    state: State
-    constructor(props: GameProps) {
+export class Game extends React.Component<object, GameState> {
+    state: GameState
+    constructor(props: object) {
         super(props)
         this.state = {
             isXSelected: true,
-            isStarted: false,
-            isMultiplayer: false
+            isMultiplayer: null
         }
     }
 
-    handleClick(i:HandleClick): void {
-        console.log(i)
-        if (i.selectedMark === "x") {
-            this.setState({
-                isXSelected: true
-            }) 
-        } else if (i.selectedMark === "o") {
-            this.setState({
-                isXSelected: false
-            })
-        }
-        console.log(this.state)
+    handleEnemySelect(i: boolean) {
+        this.setState({
+            isMultiplayer: i
+        })
+    }
+
+    handleMarkChange(i: boolean): void {
+        console.log('Param: ', i)
+        this.setState({
+            isXSelected: i
+        })
     }
 
     render(): React.ReactNode | null {
-        if (!this.state.isStarted) {
+        console.log('State: ', this.state.isMultiplayer)
+        if (this.state.isMultiplayer !== true) {
             return (
                 <Menu
-                    isXSelected={this.state.isXSelected}
-                    onClick={(i) => { this.handleClick(i) }}
+                    onChange={(i) => { this.handleMarkChange(i) }}
+                    onClick={(i) => { this.handleEnemySelect(i) }}
                 />
             )
         }
-        return null
+        return (
+            <Board />
+        )
     }
 }
 

@@ -1,0 +1,43 @@
+.board__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.header__turn-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    color: $silver;
+    font-size: 16px;
+    font-weight: 700;
+    fill: $silver;
+    width: 140px;
+    height: 48px;
+    background-color: $semi-dark-navy;
+    border-radius: 10px;
+    box-shadow: 0 4px 0 0 #10212a;
+}
+.header__reset-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    fill: $semi-dark-navy;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background-color: $silver;
+    box-shadow: inset 0 -4px 0 0 #6b8997;
+    transition: 
+        background-color 250ms,
+        box-shadow 100ms,
+        transform 100ms
+}
+.header__reset-btn:hover {
+    background-color: $silver-hover;
+}
+.header__reset-btn:active {
+    box-shadow: none;
+    transform: translateY(4px)
+}
