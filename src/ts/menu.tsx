@@ -14,7 +14,7 @@ interface EnemySelectorProps {
 }
 
     
-export default function Menu(props: MenuProps): React.ReactNode {
+export default function Menu(props: MenuProps): React.ReactElement {
         return (
             <div className='menu-container'>
                 <Logo />

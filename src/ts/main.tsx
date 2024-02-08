@@ -27,14 +27,12 @@ export class Game extends React.Component<object, GameState> {
     }
 
     handleMarkChange(i: boolean): void {
-        console.log('Param: ', i)
         this.setState({
             isXSelected: i
         })
     }
 
-    render(): React.ReactNode | null {
-        console.log('State: ', this.state.isMultiplayer)
+    render(): React.ReactElement | null {
         if (this.state.isMultiplayer !== true) {
             return (
                 <Menu
