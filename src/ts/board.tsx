@@ -71,19 +71,37 @@ export default class Board extends React.Component<BoardProps, BoardState> {
     }
 
     onRoundEnd(winner: [string, number, number, number] | string | null): JSX.Element | null {
+        const squares = this.state.field.squares.slice()
         if (winner) {
-            // const title = winner === 'tie' ? <h2 className="result__title_tie">round tied</h2> : 
-            //     winner[0] === 'x' ? (
-            //         <h2 className="result__title_x-win">
-            //             <svg className='board__x-icon' width='64' height='64'>
-            //                 <use href={`${sprite}#icon-x`}></use>
-            //             </svg>
-            //         </h2>
-            //     ) 
+            const title = winner === 'tie' ? <h2 className="result__title_tie">round tied</h2> : 
+                winner[0] === 'x' ? (
+                    <h2 className="result__title_x-win">
+                        <svg className='board__x-icon' width='64' height='64'>
+                            <use href={`${sprite}#icon-x`}></use>
+                        </svg>
+                    </h2>
+                ) :  (
+                    <h2 className="result__title_o-win">
+                        <svg className='board__o-icon' width='64' height='64'>
+                            <use href={`${sprite}#icon-o`}></use>
+                        </svg>
+                    </h2>    
+                )
+            
+            if (winner && winner !== 'tie') {
+                for (let i = 1; i <= 3; i++) {
+                    squares[winner[i]] = (
+                        <button className='board__square-btn '>
+                            {squares}
+                        </button>
+                    )
+                }
+            }
+                    
             return (
                 <div className="board__result-backdrop">
                     <div className="result__container">
-                        {/* {title} */}
+                        {title}
                         <div className="result__btns-wrapper">
                             <button className="result__quit-btn" type='button'>quit</button>
                             <button className="result__next-btn" type='button'>next round</button>
@@ -97,7 +115,8 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 
 
     render() {
-        this.onRoundEnd(calculateWinner(this.state.field.marks))
+        const winner: JSX.Element | null = this.onRoundEnd(calculateWinner(this.state.field.marks))
+
         return (
             <div className="board-container">
                 <Header
@@ -109,6 +128,7 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                     isXStep={this.state.isXStep}
                 />
                 <ScoreBoard />
+                {winner}
             </div>
         )
     }

@@ -21,9 +21,6 @@ body {
     background-color: $dark-navy;
     min-height: 100vh;
     text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 h1, h2, h3, h4 {
     font-weight: 700;
@@ -38,8 +35,11 @@ button {
     letter-spacing: 0.06em;
 }
 .game {
-    max-width: 460px;
-    max-height: 623px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
 }
 .visually-hidden {
     position: absolute;
