@@ -12,6 +12,8 @@ type GameState = {
 
 export class Game extends React.Component<object, GameState> {
     state: GameState
+    
+
     constructor(props: object) {
         super(props)
         this.state = {

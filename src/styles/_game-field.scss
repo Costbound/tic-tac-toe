@@ -40,11 +40,76 @@
     }
 }
 
-.board__square-btn_on-x-win {
+.board__square-btn_x-win {
     background-color: $light-blue;
     fill: $dark-navy;
+    box-shadow: none;
+    .board__x-icon {
+        fill: $dark-navy;
+    }
 }
-.board__square-btn_on-o-win {
+.board__square-btn_o-win {
     background-color: $light-yellow;
     fill: $dark-navy;
+    box-shadow: none;
+    .board__o-icon {
+        fill: $dark-navy;
+    }
+}
+
+// Result modal
+.board__result-backdrop {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    .result__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: 266px;
+        background-color: $semi-dark-navy;
+        .result__winner-para {
+            font-weight: 700;
+            font-size: 16px;
+            color: $silver;
+            margin-bottom: 16px;
+        }
+        .result__title_x-win,
+        .result__title_o-win {
+            display: flex;
+            align-items: center;
+            gap: 27px;
+            font-size: 40px;
+            margin-bottom: 24px;
+        }
+        .result__title_x-win {
+            color: $light-blue;
+        }
+        .result__title_o-win {
+            color: $light-yellow;
+        }
+        .result__btns-wrapper {
+            display: flex;
+            gap: 13px;
+            .result__quit-btn,
+            .result__next-btn {
+                color: $dark-navy;
+                height: 48px;
+                border-radius: 10px;
+                font-weight: 700;
+                font-size: 16px;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                text-align: center;
+            }
+        }
+    }
+    
 }

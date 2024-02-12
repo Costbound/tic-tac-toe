@@ -15,21 +15,36 @@ interface BoardState {
     isXStep: boolean
 }
 interface GameFieldProps  {
-    squares: React.ReactElement[] | null[]
+    squares: JSX.Element[] | null[]
+    marks : string[] | null[]
     isXStep: boolean
     onClick: (param: number) => void
 }
 type SquareProps = {
     value: React.ReactElement | null
+    marks: string[] | null[]
+    id: number
     isXStep: boolean
     onClick: MouseEventHandler
 }
 
 export default class Board extends React.Component<BoardProps, BoardState> {
     state: BoardState
+    readonly iconX: JSX.Element
+    readonly iconO: JSX.Element
 
     constructor(props: BoardProps) {
         super(props)
+        this.iconX = (
+            <svg className='board__x-icon' width='64' height='64'>
+                <use href={`${sprite}#icon-x`}></use>
+            </svg>
+        )
+        this.iconO = (
+            <svg className='board__o-icon' width='64' height='64'>
+                <use href={`${sprite}#icon-o`}></use>
+            </svg>
+        )
         this.state = {
             field: {
                 squares: Array(9).fill(null),
@@ -46,18 +61,10 @@ export default class Board extends React.Component<BoardProps, BoardState> {
             return
         }
         if (this.state.isXStep) {
-            squares[i] = (
-                <svg className='board__x-icon' width='64' height='64'>
-                    <use href={`${sprite}#icon-x`}></use>
-                </svg>
-            )
+            squares[i] = this.iconX
             marks[i] = 'x'
         } else {
-            squares[i] = (
-                <svg className='board__o-icon' width='64' height='64'>
-                    <use href={`${sprite}#icon-o`}></use>
-                </svg>
-            )
+            squares[i] = this.iconO
             marks[i] = 'o'
         }
             
@@ -71,36 +78,26 @@ export default class Board extends React.Component<BoardProps, BoardState> {
     }
 
     onRoundEnd(winner: [string, number, number, number] | string | null): JSX.Element | null {
-        const squares = this.state.field.squares.slice()
+
         if (winner) {
-            const title = winner === 'tie' ? <h2 className="result__title_tie">round tied</h2> : 
-                winner[0] === 'x' ? (
-                    <h2 className="result__title_x-win">
-                        <svg className='board__x-icon' width='64' height='64'>
-                            <use href={`${sprite}#icon-x`}></use>
-                        </svg>
-                    </h2>
-                ) :  (
-                    <h2 className="result__title_o-win">
-                        <svg className='board__o-icon' width='64' height='64'>
-                            <use href={`${sprite}#icon-o`}></use>
-                        </svg>
-                    </h2>    
-                )
-            
-            if (winner && winner !== 'tie') {
-                for (let i = 1; i <= 3; i++) {
-                    squares[winner[i]] = (
-                        <button className='board__square-btn '>
-                            {squares}
-                        </button>
-                    )
-                }
+            let title: JSX.Element | null = null
+            let para: JSX.Element | null = null
+
+            if (winner === 'tie') {
+                title = (<h2 className="result__title_tie">round tied</h2>)
+            } else if (winner[0] === "x") {
+                title = (<h2 className="result__title_x-win">{this.iconX} takes the round</h2>)
+                para = <p className="result__winner-para">player 1 wins!</p>
+            } else if (winner[0] === "o") {
+                title = (<h2 className="result__title_o-win">{this.iconO}takes the round</h2>)
+                para = (<p className="result__winner-para">player 2 wins!</p>)
             }
+
                     
             return (
                 <div className="board__result-backdrop">
                     <div className="result__container">
+                        {para}
                         {title}
                         <div className="result__btns-wrapper">
                             <button className="result__quit-btn" type='button'>quit</button>
@@ -115,7 +112,9 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 
 
     render() {
-        const winner: JSX.Element | null = this.onRoundEnd(calculateWinner(this.state.field.marks))
+        const winner: JSX.Element | null = calculateWinner(this.state.field.marks) ?
+            this.onRoundEnd(calculateWinner(this.state.field.marks)) :
+            null
 
         return (
             <div className="board-container">
@@ -124,6 +123,7 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 />
                 <GameField
                     squares={this.state.field.squares}
+                    marks={this.state.field.marks}
                     onClick={(i) => this.handleFieldClick(i)}
                     isXStep={this.state.isXStep}
                 />
@@ -145,6 +145,8 @@ class GameField extends React.Component<GameFieldProps> {
         return (
             <Square
                 value={this.props.squares[i]}
+                marks={this.props.marks}
+                id={i}
                 onClick={() => this.props.onClick(i)}
                 isXStep={this.props.isXStep}
             />
@@ -171,6 +173,8 @@ class GameField extends React.Component<GameFieldProps> {
 }
 function Square(props: SquareProps): JSX.Element {
     let hoverIcon: JSX.Element | null = null
+    const winner = calculateWinner(props.marks)
+
     if (!props.value) {
         if (props.isXStep) {
             hoverIcon = (
@@ -186,11 +190,23 @@ function Square(props: SquareProps): JSX.Element {
             )
         }
     }
-    return (
-            <button className='board__square-btn' onClick={props.onClick}>
+    if (winner && winner !== 'tie' && (winner[1] === props.id || winner[2] === props.id || winner[3] === props.id)) {
+        const winnerClass: string = winner[0] === 'x' ?
+            'board__square-btn_x-win' :
+            'board__square-btn_o-win'
+        
+        return (
+            <button className={`board__square-btn ${winnerClass}`}>
                 {props.value}
                 {hoverIcon}
             </button>
+        )
+    }
+    return (
+        <button className='board__square-btn' onClick={props.onClick}>
+            {props.value}
+            {hoverIcon}
+        </button>
     )
 }
 
