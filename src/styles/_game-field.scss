@@ -1,3 +1,42 @@
+%modal__backdrop {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+%modal__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 266px;
+    background-color: $semi-dark-navy;
+}
+%modal__default-title {
+    font-size: 40px;
+    color: $silver;
+    margin-bottom: 41px;
+}
+%modal__btns {
+    color: $dark-navy;
+    height: 52px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    transition:
+        background-color 250ms,
+        transform 50ms,
+        box-shadow 50ms;
+}
+
 .board__game-field {
     width: 100%;
     display: flex;
@@ -59,22 +98,9 @@
 
 // Result modal
 .board__result-backdrop {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    @extend %modal__backdrop;
     .result__container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        width: 100%;
-        height: 266px;
-        background-color: $semi-dark-navy;
+        @extend %modal__container;
         .result__winner-para {
             font-weight: 700;
             font-size: 16px;
@@ -89,6 +115,9 @@
             font-size: 40px;
             margin-bottom: 24px;
         }
+        .result__title_tie {
+            @extend %modal__default-title;
+        }
         .result__title_x-win {
             color: $light-blue;
         }
@@ -100,16 +129,93 @@
             gap: 13px;
             .result__quit-btn,
             .result__next-btn {
-                color: $dark-navy;
-                height: 48px;
-                border-radius: 10px;
-                font-weight: 700;
-                font-size: 16px;
-                letter-spacing: 0.06em;
-                text-transform: uppercase;
-                text-align: center;
+                @extend %modal__btns;
+            }
+            .result__quit-btn {
+                width: 76px;
+                background-color: $silver;
+                box-shadow: inset 0 -4px 0 0 #6b8997;
+            }
+            .result__next-btn {
+                width: 146px;
+                background-color: $light-yellow;
+                box-shadow: inset 0 -4px 0 0 #cc8b13;
+            }
+            .result__quit-btn:hover {
+                background-color: $silver-hover;
+            }
+            .result__next-btn:hover {
+                background-color: $light-yellow-hover;
+            }
+            .result__quit-btn:active {
+                box-shadow: none;
+                transform: translateY(4px);
+            }
+                        .result__quit-btn:active {
+                box-shadow: none;
+                transform: translateY(4px);
+            }
+            .result__next-btn:active {
+                box-shadow: none;
+                transform: translateY(4px);
             }
         }
     }
     
+}
+
+
+// Restart modal 
+.board__restart-backdrop {
+    @extend %modal__backdrop;
+
+    .restart__container {
+        @extend %modal__container;
+        .restart__title {
+            @extend %modal__default-title;
+        }
+        .restart__btns-wrapper {
+            display: flex;
+            gap: 13px;
+            .restart__no-btn,
+            .restart__yes-btn {
+                @extend %modal__btns;
+            }
+            .restart__no-btn {
+                width: 139px;
+                background-color: $silver;
+                box-shadow: inset 0 -4px 0 0 #6b8997;
+            }
+
+            .restart__yes-btn {
+                width: 151px;
+                background-color: $light-yellow;
+                box-shadow: inset 0 -4px 0 0 #cc8b13;
+            }
+
+            .restart__no-btn:hover {
+                background-color: $silver-hover;
+            }
+
+            .restart__yes-btn:hover {
+                background-color: $light-yellow-hover;
+            }
+
+            .restart__no-btn:active {
+                box-shadow: none;
+                transform: translateY(4px);
+            }
+
+            .restart__no-btn:active {
+                box-shadow: none;
+                transform: translateY(4px);
+            }
+
+            .restart__yes-btn:active {
+                box-shadow: none;
+                transform: translateY(4px);
+            }
+        }
+    }
+
 }

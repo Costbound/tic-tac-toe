@@ -5,14 +5,22 @@ import ScoreBoard from './score-board'
 
 
 interface BoardProps {
-
+    resetGame: () => void
+    isMultiplayer: boolean
+    isXSelected: boolean
 }
 interface BoardState {
     field: {
         squares: JSX.Element[] | null[]
         marks: string[] | null[]
     }
+    scores: {
+        xScore: number
+        oScore: number
+        ties: number
+    }
     isXStep: boolean
+    isRestart: boolean
 }
 interface GameFieldProps  {
     squares: JSX.Element[] | null[]
@@ -50,7 +58,13 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 squares: Array(9).fill(null),
                 marks: Array(9).fill(null),
             },
-            isXStep: true
+            scores: {
+                xScore: 0,
+                oScore: 0,
+                ties: 0
+            },
+            isXStep: true,
+            isRestart: false
         }
     }
 
@@ -77,6 +91,53 @@ export default class Board extends React.Component<BoardProps, BoardState> {
         })
     }
 
+    restartClickHandler() {
+        this.setState({
+            isRestart: true
+        })
+    }
+
+    nextRoundHandler(): void {
+        const winner = calculateWinner(this.state.field.marks)
+        let { xScore, oScore, ties } = this.state.scores
+
+        if (winner) {
+            winner === 'tie' ? ties += 1 :
+                winner[0] === 'x' ? xScore += 1 :
+                    winner[0] === 'o' ? oScore += 1 : null
+        }
+
+        this.setState({
+            field: {
+                squares: Array(9).fill(null),
+                marks: Array(9).fill(null)
+            },
+            isXStep: true,
+            scores: {
+                xScore: xScore,
+                oScore: oScore,
+                ties: ties
+            }
+        })
+    }
+
+    restartGame() {
+        this.setState({
+            field: {
+                squares: Array(9).fill(null),
+                marks: Array(9).fill(null),
+            },
+            scores: {
+                xScore: 0,
+                oScore: 0,
+                ties: 0
+            },
+            isXStep: true,
+            isRestart: false
+        })
+        this.props.resetGame()
+    }
+
     onRoundEnd(winner: [string, number, number, number] | string | null): JSX.Element | null {
 
         if (winner) {
@@ -100,8 +161,8 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                         {para}
                         {title}
                         <div className="result__btns-wrapper">
-                            <button className="result__quit-btn" type='button'>quit</button>
-                            <button className="result__next-btn" type='button'>next round</button>
+                            <button className="result__quit-btn" type='button'onClick={() => this.restartClickHandler()}>quit</button>
+                            <button className="result__next-btn" type='button' onClick={ () => this.nextRoundHandler() }>next round</button>
                         </div>
                     </div>
                 </div>
@@ -115,11 +176,24 @@ export default class Board extends React.Component<BoardProps, BoardState> {
         const winner: JSX.Element | null = calculateWinner(this.state.field.marks) ?
             this.onRoundEnd(calculateWinner(this.state.field.marks)) :
             null
-
+        const restartModal = !this.state.isRestart ? null :
+            (
+               <div className="board__restart-backdrop">
+                    <div className="restart__container">
+                        <h2 className="restart__title">restart game?</h2>
+                        <div className="restart__btns-wrapper">
+                            <button className="restart__no-btn" type='button' onClick={() => {this.setState({isRestart: false})}}>no, cancel</button>
+                            <button className="restart__yes-btn" type='button' onClick={() => {this.restartGame()}}>yes, restart</button>
+                        </div>
+                    </div>
+                </div> 
+            )
+        
         return (
             <div className="board-container">
                 <Header
                     isXStep={this.state.isXStep}
+                    onClick={() => this.restartClickHandler()}
                 />
                 <GameField
                     squares={this.state.field.squares}
@@ -127,8 +201,13 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                     onClick={(i) => this.handleFieldClick(i)}
                     isXStep={this.state.isXStep}
                 />
-                <ScoreBoard />
+                <ScoreBoard
+                    isMultiplayer={this.props.isMultiplayer}
+                    isXSelected={this.props.isXSelected}
+                    scores={this.state.scores}
+                />
                 {winner}
+                {restartModal}
             </div>
         )
     }

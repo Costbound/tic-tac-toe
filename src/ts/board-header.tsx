@@ -3,6 +3,7 @@ import sprite from '../assets/img/sprite.svg'
 
 type HeaderProps = {
     isXStep: boolean
+    onClick: () => void
 }
 type StepSVGProps = {
     isXStep: boolean
@@ -21,7 +22,7 @@ export default function Header(props: HeaderProps) {
                 />
                 <p className="header__turn-para">turn</p>
             </div>
-            <button className="header__reset-btn" type='button'>
+            <button className="header__reset-btn" type='button' onClick={props.onClick}>
                 <svg className='header-reset-icon' width='20' height='20'>
                     <use href={`${sprite}#icon-restart`}></use>
                 </svg>

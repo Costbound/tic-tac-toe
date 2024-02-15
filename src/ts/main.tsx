@@ -33,6 +33,12 @@ export class Game extends React.Component<object, GameState> {
             isXSelected: i
         })
     }
+    handleReset() {
+        this.setState({
+            isXSelected: true,
+            isMultiplayer: null
+        })
+    }
 
     render(): React.ReactElement | null {
         if (this.state.isMultiplayer !== true) {
@@ -44,7 +50,11 @@ export class Game extends React.Component<object, GameState> {
             )
         }
         return (
-            <Board />
+            <Board
+                resetGame={() => { this.handleReset() }}
+                isMultiplayer={this.state.isMultiplayer}
+                isXSelected={this.state.isXSelected}
+            />
         )
     }
 }
