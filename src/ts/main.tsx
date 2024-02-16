@@ -4,7 +4,6 @@ import '../styles/index.scss'
 import Menu from './menu'
 import Board from './board'
 
-
 type GameState = {
     isXSelected: boolean
     isMultiplayer: boolean | null
@@ -16,10 +15,11 @@ export class Game extends React.Component<object, GameState> {
 
     constructor(props: object) {
         super(props)
-        this.state = {
-            isXSelected: true,
-            isMultiplayer: null
-        }
+        this.state = localStorage.getItem('game') ? JSON.parse(localStorage.getItem('game')!) :
+            {
+                isXSelected: true,
+                isMultiplayer: null
+            }
     }
 
     handleEnemySelect(i: boolean) {
@@ -38,10 +38,12 @@ export class Game extends React.Component<object, GameState> {
             isXSelected: true,
             isMultiplayer: null
         })
+        localStorage.clear()
     }
 
     render(): React.ReactElement | null {
-        if (this.state.isMultiplayer !== true) {
+        localStorage.setItem('game', JSON.stringify(this.state))
+        if (this.state.isMultiplayer === null) {
             return (
                 <Menu
                     onChange={(i) => { this.handleMarkChange(i) }}

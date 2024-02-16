@@ -2,6 +2,7 @@ import React, { MouseEventHandler } from 'react'
 import sprite from '../assets/img/sprite.svg'
 import Header from './board-header'
 import ScoreBoard from './score-board'
+import makeStep from './ai'
 
 
 interface BoardProps {
@@ -53,42 +54,54 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 <use href={`${sprite}#icon-o`}></use>
             </svg>
         )
-        this.state = {
-            field: {
-                squares: Array(9).fill(null),
-                marks: Array(9).fill(null),
-            },
-            scores: {
-                xScore: 0,
-                oScore: 0,
-                ties: 0
-            },
-            isXStep: true,
-            isRestart: false
-        }
+        const squares = JSON.parse(localStorage.getItem('marks')!) ? JSON.parse(localStorage.getItem('marks')!).map((mark: string | null): JSX.Element | null => {
+            if (mark === 'x') {
+                return this.iconX
+            } else if (mark === 'o') {
+                return this.iconO
+            }
+            return null
+        }) : null
+
+        this.state = localStorage.getItem('board') ? JSON.parse(localStorage.getItem('board')!) :
+            {
+                field: {
+                    squares: squares,
+                    marks: JSON.parse(localStorage.getItem('marks')!) || Array(9).fill(null),
+                },
+                scores: JSON.parse(localStorage.getItem('scores')!) || {
+                    xScore: 0,
+                    oScore: 0,
+                    ties: 0
+                },
+                isXStep: JSON.parse(localStorage.getItem('isXStep')!) || true,
+                isRestart: false
+            }
     }
 
 
-    handleFieldClick(i: number): void {
-        const { squares, marks } = this.state.field
-        if (squares[i] || calculateWinner(this.state.field.marks)) {
-            return
-        }
-        if (this.state.isXStep) {
-            squares[i] = this.iconX
-            marks[i] = 'x'
-        } else {
-            squares[i] = this.iconO
-            marks[i] = 'o'
-        }
+    handleFieldClick(i: number | null | undefined): void {
+        if (i || i === 0) {
+            const { squares, marks } = this.state.field
+            if (squares[i] || calculateWinner(this.state.field.marks)) {
+                return
+            }
+            if (this.state.isXStep) {
+                squares[i] = this.iconX
+                marks[i] = 'x'
+            } else {
+                squares[i] = this.iconO
+                marks[i] = 'o'
+            }
             
-        this.setState({
-            field: {
-                squares: squares,
-                marks: marks
-            },
-            isXStep: !this.state.isXStep
-        })
+            this.setState({
+                field: {
+                    squares: squares,
+                    marks: marks
+                },
+                isXStep: !this.state.isXStep
+            })
+        }
     }
 
     restartClickHandler() {
@@ -173,6 +186,11 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 
 
     render() {
+        localStorage.setItem('marks', JSON.stringify(this.state.field.marks))
+        localStorage.setItem('scores', JSON.stringify(this.state.scores))
+        localStorage.setItem('isXStep', JSON.stringify(this.state.isXStep))
+
+
         const winner: JSX.Element | null = calculateWinner(this.state.field.marks) ?
             this.onRoundEnd(calculateWinner(this.state.field.marks)) :
             null
@@ -188,6 +206,10 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                     </div>
                 </div> 
             )
+        
+        if (!this.props.isMultiplayer) {
+            this.handleFieldClick(makeStep(this.state.field.marks, this.props.isXSelected, this.state.isXStep))
+        }
         
         return (
             <div className="board-container">
