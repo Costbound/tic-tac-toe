@@ -33,6 +33,9 @@ button {
     font-weight: 700;
     font-size: 20px;
     letter-spacing: 0.06em;
+    @media (max-width: 767px) {
+        font-size: 16px;
+    }
 }
 .game {
     display: flex;
@@ -56,9 +59,14 @@ button {
 }
 .board-container {
     width: 460px;
+    @media (max-width: 767px) {
+        width: 328px;
+    }
 }
 
 @import 'menu';
 @import 'board-header';
 @import 'game-field';
-@import 'score-board'
+@import 'score-board';
+@import 'result-modal';
+@import 'restart-modal';

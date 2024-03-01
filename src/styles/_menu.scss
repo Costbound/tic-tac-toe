@@ -2,6 +2,9 @@
     display: flex;
     justify-content: space-around;
     margin-bottom: 40px;
+    @media (max-width: 767px) {
+        margin-bottom: 32px;
+    }
 }
 
 .mark-selector__container {
@@ -12,6 +15,9 @@
     box-shadow: inset 0 -8px 0 0 #10212a;
     background: $semi-dark-navy;
     margin-bottom: 40px;
+    @media (max-width: 767px) {
+        width: 327px;
+    }
     .mark-selector__title {
         font-size: 16px;
         color: $silver;
@@ -56,9 +62,12 @@
         left: 9px;
         background-color: #979797;
         border-radius: 10px;
-        width: 198px;
+        width: 197px;
         height: 54px;
         transition: transform 250ms;
+        @media (max-width: 767px) {
+            width: 131px;
+        }
     }
     .mark-selector__notice {
         color: $silver;

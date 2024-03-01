@@ -13,6 +13,10 @@
     height: 72px;
     color: $dark-navy;
     border-radius: 15px;
+    @media (max-width: 767px) {
+        width: 96px;
+        height: 64px;
+    }
 }
 .score-board__x-score-container {
     background-color: $light-blue;
@@ -25,8 +29,14 @@
 }
 .score-board__title {
     font-weight: 500;
+    @media (max-width: 767px) {
+        font-size: 12px;
+    }
 }
 .score-board__scores {
     font-weight: 700;
     font-size: 24px;
+    @media (max-width: 767px) {
+        font-size: 20px;
+    }
 }

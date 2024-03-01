@@ -21,6 +21,7 @@ interface BoardState {
         ties: number
     }
     isXStep: boolean
+    isXGoesFirst: boolean
     isRestart: boolean
 }
 interface GameFieldProps  {
@@ -75,6 +76,7 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                     ties: 0
                 },
                 isXStep: JSON.parse(localStorage.getItem('isXStep')!) || true,
+                isXGoesFirst: JSON.parse(localStorage.getItem('isXGoesFirst')!) || true,
                 isRestart: false
             }
     }
@@ -125,7 +127,8 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 squares: Array(9).fill(null),
                 marks: Array(9).fill(null)
             },
-            isXStep: true,
+            isXStep: !this.state.isXGoesFirst,
+            isXGoesFirst: !this.state.isXGoesFirst,
             scores: {
                 xScore: xScore,
                 oScore: oScore,
