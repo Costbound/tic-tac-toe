@@ -64,6 +64,7 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 return this.iconO
             }
             return null
+        }) : Array(9).fill(null)
 
         // If there is saved game progress (states) in local storage takes it for generate game, if not set default states
         this.state = {
