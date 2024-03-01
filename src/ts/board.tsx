@@ -55,35 +55,36 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 <use href={`${sprite}#icon-o`}></use>
             </svg>
         )
-        const squares = JSON.parse(localStorage.getItem('marks')!) ? JSON.parse(localStorage.getItem('marks')!).map((mark: string | null): JSX.Element | null => {
+
+        // Generate saved in local storage field or generate empty field if there is no saved field in local storage
+        const squares: JSX.Element[] | null[] = JSON.parse(localStorage.getItem('marks')!) ? JSON.parse(localStorage.getItem('marks')!).map((mark: string | null): JSX.Element | null => {
             if (mark === 'x') {
                 return this.iconX
             } else if (mark === 'o') {
                 return this.iconO
             }
             return null
-        }) : null
 
-        this.state = localStorage.getItem('board') ? JSON.parse(localStorage.getItem('board')!) :
-            {
-                field: {
-                    squares: squares,
-                    marks: JSON.parse(localStorage.getItem('marks')!) || Array(9).fill(null),
-                },
-                scores: JSON.parse(localStorage.getItem('scores')!) || {
-                    xScore: 0,
-                    oScore: 0,
-                    ties: 0
-                },
-                isXStep: JSON.parse(localStorage.getItem('isXStep')!) || true,
-                isXGoesFirst: JSON.parse(localStorage.getItem('isXGoesFirst')!) || true,
-                isRestart: false
-            }
+        // If there is saved game progress (states) in local storage takes it for generate game, if not set default states
+        this.state = {
+            field: {
+                squares: squares, // for render svg icons 'X' and 'O' in squares
+                marks: JSON.parse(localStorage.getItem('marks')!) || Array(9).fill(null), // marks 'x', 'o' or null. Used for algorythms.
+            },
+            scores: JSON.parse(localStorage.getItem('scores')!) || {
+                xScore: 0,
+                oScore: 0,
+                ties: 0
+            },
+            isXStep: JSON.parse(localStorage.getItem('isXStep')!) !== null ? JSON.parse(localStorage.getItem('isXStep')!) : true,
+            isXGoesFirst: JSON.parse(localStorage.getItem('isXGoesFirst')!) !== null ? JSON.parse(localStorage.getItem('isXGoesFirst')!) : true,
+            isRestart: false
+        }
     }
 
 
     handleFieldClick(i: number | null | undefined): void {
-        if (i || i === 0) {
+        if (i || i === 0) { // check if i is index of square
             const { squares, marks } = this.state.field
             if (squares[i] || calculateWinner(this.state.field.marks)) {
                 return
@@ -199,11 +200,25 @@ export default class Board extends React.Component<BoardProps, BoardState> {
         return null
     }
 
+    componentDidMount(): void {
+        if (!this.props.isMultiplayer) {
+            this.handleFieldClick(makeStep(this.state.field.marks, this.props.isXSelected, this.state.isXStep))
+        }
+    }
+
+    componentDidUpdate(): void {
+        if (!this.props.isMultiplayer) {
+            this.handleFieldClick(makeStep(this.state.field.marks, this.props.isXSelected, this.state.isXStep))
+        }
+
+    }
+
 
     render() {
         localStorage.setItem('marks', JSON.stringify(this.state.field.marks))
         localStorage.setItem('scores', JSON.stringify(this.state.scores))
         localStorage.setItem('isXStep', JSON.stringify(this.state.isXStep))
+
 
 
         const winner: JSX.Element | null = calculateWinner(this.state.field.marks) ?
@@ -222,9 +237,6 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 </div> 
             )
         
-        if (!this.props.isMultiplayer) {
-            this.handleFieldClick(makeStep(this.state.field.marks, this.props.isXSelected, this.state.isXStep))
-        }
         
         return (
             <div className="board-container">

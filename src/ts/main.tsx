@@ -9,6 +9,7 @@ type GameState = {
     isMultiplayer: boolean | null
 }
 
+// Main Element, render Menu or Game field
 export class Game extends React.Component<object, GameState> {
     state: GameState
     
@@ -17,22 +18,26 @@ export class Game extends React.Component<object, GameState> {
         super(props)
         this.state = localStorage.getItem('game') ? JSON.parse(localStorage.getItem('game')!) :
             {
-                isXSelected: true,
-                isMultiplayer: null
+                isXSelected: true, // Mark X or O selector state
+                isMultiplayer: null // Select play vs CPU or another player, if null - menu will be rendered
             }
     }
 
+    // Handle what user select - play vs CPU or vs another player
     handleEnemySelect(i: boolean) {
         this.setState({
             isMultiplayer: i
         })
     }
 
+    // Handle what player select - mark X or mark O
     handleMarkChange(i: boolean): void {
         this.setState({
             isXSelected: i
         })
     }
+
+    // Reset states to default when game reset activated
     handleReset() {
         this.setState({
             isXSelected: true,
@@ -42,7 +47,9 @@ export class Game extends React.Component<object, GameState> {
     }
 
     render(): React.ReactElement | null {
+        // Save game progress to local storage
         localStorage.setItem('game', JSON.stringify(this.state))
+        
         if (this.state.isMultiplayer === null) {
             return (
                 <Menu

@@ -13,11 +13,14 @@ interface EnemySelectorProps {
     onClick: (param: boolean) => void
 }
 
-    
 export default function Menu(props: MenuProps): React.ReactElement {
         return (
             <div className='menu-container'>
-                <Logo />
+                <div className="logo-container">
+                    <svg width='72' height='32'>
+                        <use href={ `${sprite}#logo` } />
+                    </svg>
+                </div>
                 <MarkSelector
                     onChange = {(i) => {props.onChange(i)}}
                 />
@@ -28,15 +31,6 @@ export default function Menu(props: MenuProps): React.ReactElement {
         )
 }
 
-function Logo() {
-    return (
-        <div className="logo-container">
-            <svg width='72' height='32'>
-                <use href={ `${sprite}#logo` } />
-            </svg>
-        </div>
-    )
-}
 
 function MarkSelector(props: MarkSelectorProps) {
 const [checked, setChecked] = useState(true)
@@ -60,7 +54,7 @@ const [checked, setChecked] = useState(true)
                     <use href={`${sprite}#icon-o`}></use>
                 </svg>
             </label>
-            <p className="mark-selector__notice">remember: x goes firt</p>
+            <p className="mark-selector__notice">remember: x goes first</p>
         </div>
     )
 }

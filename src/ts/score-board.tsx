@@ -1,7 +1,3 @@
-// interface ScoreBoardProps {
-
-// }
-
 interface ScoreBoardProps {
     isMultiplayer: boolean
     isXSelected: boolean
@@ -28,8 +24,8 @@ export default function ScoreBoard(props: ScoreBoardProps) {
             xTitle = 'you'
             oTitle = 'cpu'
         } else {
-            xTitle = 'you'
-            oTitle = 'cpu'
+            xTitle = 'cpu'
+            oTitle = 'you'
         }
     }
 

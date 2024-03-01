@@ -1,11 +1,13 @@
 
-
+// Calculating cpu next step. Return number from 0 to 8 or undefined. Returned number will be index of square for cpu step
 export default function makeStep(marksDirty: string[] | null[], isXSelected: boolean, isXStep: boolean): number | undefined {
-    const marks = marksDirty.slice()
-    const oponent: string = isXSelected ? 'x' : 'o'
-    const cpu: string = isXSelected ? 'o' : 'x'
+    const marks = marksDirty.slice() // Create field state copy
+    const oponent: string = isXSelected ? 'x' : 'o' // check which mark is player
+    const cpu: string = isXSelected ? 'o' : 'x' // check which mark is cpu
     const isCpuStep = !isXSelected && isXStep ? true :
         isXSelected && !isXStep ? true : false
+    
+    // All win states. Numbers in arrays is index of square in marks or squares
     const winState: number[][] = [
         [0, 1, 2],
         [3, 4, 5],
@@ -17,8 +19,8 @@ export default function makeStep(marksDirty: string[] | null[], isXSelected: boo
         [2, 4, 6]
     ]
 
-
     if (isCpuStep) {
+        // if game field is empty generate rundom number
         if (marks.every(mark => mark === null)) {
             const randomMark = Math.floor(Math.random() * 10)
             if (randomMark > 8) {
@@ -27,6 +29,7 @@ export default function makeStep(marksDirty: string[] | null[], isXSelected: boo
             return randomMark
         }
         
+        // Check if there is remain for cpu to put only one mark to win and if yes will return this square index
         for (let state of winState) {
             const [a, b, c] = state
 
@@ -39,6 +42,7 @@ export default function makeStep(marksDirty: string[] | null[], isXSelected: boo
             }
         }
 
+        // Check if thre is remain for player to put only one mark to win and if yes will return this quare index to block oponent
         for (let state of winState) {
             const [a, b, c] = state
 
@@ -51,10 +55,12 @@ export default function makeStep(marksDirty: string[] | null[], isXSelected: boo
             }
         }
 
-
+        // Put mark in center square if it is empty
         if (!marks[4]) {
             return 4
         }
+
+        // Put mark in first empty square
         return marks.indexOf(null!)
     }
 }
