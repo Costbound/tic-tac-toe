@@ -9,6 +9,9 @@
             font-size: 16px;
             color: $silver;
             margin-bottom: 16px;
+            @media (max-width: 767px) {
+                font-size: 14px;
+            }
         }
 
         .result__title_x-win,
@@ -18,6 +21,15 @@
             gap: 27px;
             font-size: 40px;
             margin-bottom: 24px;
+            @media (max-width: 767px) {
+                font-size: 24px;
+                gap: 8px;
+                .board__x-icon,
+                .board__o-icon {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
         }
 
         .result__title_tie {

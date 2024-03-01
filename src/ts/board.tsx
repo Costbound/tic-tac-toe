@@ -164,10 +164,22 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 title = (<h2 className="result__title_tie">round tied</h2>)
             } else if (winner[0] === "x") {
                 title = (<h2 className="result__title_x-win">{this.iconX} takes the round</h2>)
-                para = <p className="result__winner-para">player 1 wins!</p>
+                if (this.props.isMultiplayer) {
+                    para = this.props.isXSelected ? (<p className="result__winner-para">player 1 wins!</p>) :
+                        (<p className="result__winner-para">player 2 wins!</p>)
+                } else {
+                    para = this.props.isXSelected ? (<p className="result__winner-para">you won!</p>) :
+                        (<p className="result__winner-para">oh no, you lost...</p>)
+                }
             } else if (winner[0] === "o") {
                 title = (<h2 className="result__title_o-win">{this.iconO}takes the round</h2>)
-                para = (<p className="result__winner-para">player 2 wins!</p>)
+                if (this.props.isMultiplayer) {
+                    para = this.props.isXSelected ? (<p className="result__winner-para">player 2 wins!</p>) : 
+                        (<p className="result__winner-para">player 1 wins!</p>)
+                } else {
+                    para = this.props.isXSelected ? (<p className="result__winner-para">oh no, you lost...</p>) : 
+                        (<p className="result__winner-para">you won!</p>)
+                }
             }
 
                     
