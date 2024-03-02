@@ -46,7 +46,7 @@ const [checked, setChecked] = useState(true)
                 onChange={() => { props.onChange(!checked);  setChecked(!checked) }}
             />
             <label className="mark-selector__label" htmlFor='mark-selector'>
-                <div className="mark-selector__selected-div"></div>
+                <span className="mark-selector__selected-div"></span>
                 <svg className='mark-selector__x-icon' width='32' height='32'>
                     <use href={`${sprite}#icon-x`}></use>
                 </svg>
