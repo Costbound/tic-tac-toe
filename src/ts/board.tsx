@@ -77,8 +77,11 @@ export default class Board extends React.Component<BoardProps, BoardState> {
                 oScore: 0,
                 ties: 0
             },
+            // Necessary to determine whose turn it is now
             isXStep: JSON.parse(localStorage.getItem('isXStep')!) !== null ? JSON.parse(localStorage.getItem('isXStep')!) : true,
+            //Necessary to determine whose turn will be first on next round
             isXGoesFirst: JSON.parse(localStorage.getItem('isXGoesFirst')!) !== null ? JSON.parse(localStorage.getItem('isXGoesFirst')!) : true,
+            // Necessary to restart btn on quit btn click handling
             isRestart: false
         }
     }
@@ -88,8 +91,10 @@ export default class Board extends React.Component<BoardProps, BoardState> {
         if (i || i === 0) { // check if i is index of square
             const { squares, marks } = this.state.field
             if (squares[i] || calculateWinner(this.state.field.marks)) {
-                return
+                return // return if it is already mark in clicked square or winner founded
             }
+
+            // Put mark in square depends whom step is it
             if (this.state.isXStep) {
                 squares[i] = this.iconX
                 marks[i] = 'x'
@@ -115,10 +120,11 @@ export default class Board extends React.Component<BoardProps, BoardState> {
     }
 
     nextRoundHandler(): void {
-        const winner = calculateWinner(this.state.field.marks)
+        const winner = calculateWinner(this.state.field.marks) // Verify if there is a winner
         let { xScore, oScore, ties } = this.state.scores
 
         if (winner) {
+            // Update score board
             winner === 'tie' ? ties += 1 :
                 winner[0] === 'x' ? xScore += 1 :
                     winner[0] === 'o' ? oScore += 1 : null
@@ -139,6 +145,7 @@ export default class Board extends React.Component<BoardProps, BoardState> {
         })
     }
 
+    // Reset board to default states
     restartGame() {
         this.setState({
             field: {
@@ -153,7 +160,7 @@ export default class Board extends React.Component<BoardProps, BoardState> {
             isXStep: true,
             isRestart: false
         })
-        this.props.resetGame()
+        this.props.resetGame() // Reset Game to default states
     }
 
     onRoundEnd(winner: [string, number, number, number] | string | null): JSX.Element | null {
@@ -201,12 +208,12 @@ export default class Board extends React.Component<BoardProps, BoardState> {
         return null
     }
 
+    // Calculate CPU step
     componentDidMount(): void {
         if (!this.props.isMultiplayer) {
             this.handleFieldClick(makeStep(this.state.field.marks, this.props.isXSelected, this.state.isXStep))
         }
     }
-
     componentDidUpdate(): void {
         if (!this.props.isMultiplayer) {
             this.handleFieldClick(makeStep(this.state.field.marks, this.props.isXSelected, this.state.isXStep))
@@ -216,15 +223,16 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 
 
     render() {
+        // Save game progress to local storage
         localStorage.setItem('marks', JSON.stringify(this.state.field.marks))
         localStorage.setItem('scores', JSON.stringify(this.state.scores))
         localStorage.setItem('isXStep', JSON.stringify(this.state.isXStep))
 
-
-
+        // Check if there is winner and if yes start round end algorythm
         const winner: JSX.Element | null = calculateWinner(this.state.field.marks) ?
             this.onRoundEnd(calculateWinner(this.state.field.marks)) :
             null
+        
         const restartModal = !this.state.isRestart ? null :
             (
                <div className="board__restart-backdrop">
@@ -263,7 +271,7 @@ export default class Board extends React.Component<BoardProps, BoardState> {
     }
 }
 
-
+// Rendering squares whith index as id
 class GameField extends React.Component<GameFieldProps> {
 
     constructor(props: GameFieldProps) {
@@ -300,10 +308,12 @@ class GameField extends React.Component<GameFieldProps> {
         )
     }
 }
+
 function Square(props: SquareProps): JSX.Element {
     let hoverIcon: JSX.Element | null = null
     const winner = calculateWinner(props.marks)
 
+    // Display hover icon
     if (!props.value) {
         if (props.isXStep) {
             hoverIcon = (
@@ -319,6 +329,8 @@ function Square(props: SquareProps): JSX.Element {
             )
         }
     }
+
+    // Highlight squares (cahnge bg color and icon fill) involved in win combination
     if (winner && winner !== 'tie' && (winner[1] === props.id || winner[2] === props.id || winner[3] === props.id)) {
         const winnerClass: string = winner[0] === 'x' ?
             'board__square-btn_x-win' :
@@ -339,6 +351,8 @@ function Square(props: SquareProps): JSX.Element {
     )
 }
 
+
+// Check for round end state and return null if round not finished, "tie" if round tied and array of winner mark and squares involved in win combination if there is winner
 function calculateWinner(marks: string[] | null[]): [string, number, number, number] | string | null {
     const winState = [
         [0, 1, 2],
